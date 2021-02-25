@@ -63,6 +63,16 @@ def to_dicts(frame):
     return result
 
 
+def copy(frame):
+    return from_dicts(to_dicts(frame))
+
+
+def append(f, d):
+    f = copy(f)
+    _append(f, d)
+    return f
+
+
 def slice_frame(frame, inds):
     result = new()
     for i in inds:

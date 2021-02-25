@@ -13,7 +13,7 @@ def test_simple():
 
     new = dict(x=2, y=2)
     assert lpd.size(f) == 2
-    lpd.append(f, new)
+    f = lpd.append(f, new)
     assert lpd.size(f) == 3
     assert lpd.to_dicts(f) == dicts + [new]
     grouped = lpd.group_by(f, 'x')

@@ -1,13 +1,14 @@
 from collections import defaultdict
+from functools import partial
 
 
 def new():
     return dict()
 
 
-def size(f):
+def size(frame):
     s = None
-    for vs in f.values():
+    for vs in frame.values():
         if s is None:
             s = len(vs)
         else:
@@ -51,6 +52,10 @@ def index(frame, ind):
     return res
 
 
+def index_op(ind):
+    return lambda frame: index(frame, ind)
+
+
 def to_dicts(frame):
     result = []
     for i in range(size(frame)):
@@ -58,20 +63,24 @@ def to_dicts(frame):
     return result
 
 
-def slice(f, inds):
+def slice_frame(frame, inds):
     result = new()
     for i in inds:
-        _append(result, index(f, i))
+        _append(result, index(frame, i))
     return result
 
 
-def group_by(f, fn):
+def slice_op(inds):
+    return lambda frame: slice_frame(frame, inds)
+
+
+def group_by(frame, fn):
     if isinstance(fn, str):
         k = fn
         fn = lambda x: x[k]
     key_to_vals = defaultdict(new)
-    for i in range(size(f)):
-        val = index(f, i)
+    for i in range(size(frame)):
+        val = index(frame, i)
         key = fn(val)
         _append(key_to_vals[key], val)
     result = new()
@@ -80,26 +89,45 @@ def group_by(f, fn):
     return result
 
 
-def sort_by(f, fn):
-    ds = to_dicts(f)
+def group_by_op(fn):
+    return lambda frame: group_by(frame, fn)
+
+
+def sort_by(frame, fn):
+    ds = to_dicts(frame)
     ds = sorted(ds, key=fn)
     return from_dicts(ds)
 
 
-def map(f, fn):
+def sort_by_op(fn):
+    return lambda frame: sort_by(frame, fn)
+
+
+def map_frame(frame, fn):
     result = new()
-    for i in range(size(f)):
-        mapped = fn(index(f, i))
+    for i in range(size(frame)):
+        mapped = fn(index(frame, i))
         _append(result, mapped)
     return result
 
 
-def compute_key(f, k, fn):
+def map_op(fn):
+    return lambda frame: map_frame(frame, fn)
+
+
+def compute_key(frame, k, fn):
     result = new()
-    for i in range(size(f)):
-        d = index(f, i)
+    for i in range(size(frame)):
+        d = index(frame, i)
         v = fn(d)
         d[k] = v
         _append(result, d)
     return result
 
+
+def compute_key_op(k, fn):
+    return lambda frame: compute_key(frame, k, fn)
+
+
+map = map_frame
+slice = slice_frame

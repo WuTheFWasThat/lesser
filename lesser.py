@@ -78,3 +78,28 @@ def group_by(f, fn):
     for k, vals in key_to_vals.items():
         append(result, dict(key=k, values=vals))
     return result
+
+
+def sort_by(f, fn):
+    ds = to_dicts(f)
+    ds = sorted(ds, key=fn)
+    return from_dicts(ds)
+
+
+def map(f, fn):
+    result = new()
+    for i in range(size(f)):
+        mapped = fn(index(f, i))
+        append(result, mapped)
+    return result
+
+
+def compute_key(f, k, fn):
+    result = new()
+    for i in range(size(f)):
+        d = index(f, i)
+        v = fn(d)
+        d[k] = v
+        append(result, d)
+    return result
+

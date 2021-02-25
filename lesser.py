@@ -18,6 +18,8 @@ def size(frame):
     return s
 
 
+_key_missing = object()
+
 # NOTE: this mutates
 def _append(frame, x):
     s = size(frame)
@@ -25,13 +27,13 @@ def _append(frame, x):
         if k not in frame:
             frame[k] = []
             for _ in range(s):
-                frame[k].append(None)
+                frame[k].append(_key_missing)
         assert len(frame[k]) == s
         frame[k].append(v)
     for k in frame.keys():
         if len(frame[k]) != s + 1:
             assert k not in x
-            frame[k].append(None)
+            frame[k].append(_key_missing)
     return frame
 
 
@@ -46,7 +48,7 @@ def index(frame, ind):
     res = dict()
     for k in frame:
         v = frame[k][ind]
-        if v is None:
+        if v is _key_missing:
             continue
         res[k] = v
     return res

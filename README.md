@@ -1,4 +1,4 @@
-# Lesser :panda:
+# Lesser :panda_face:
 
 This is a tiny data manipulation library, very loosely based on pandas.
 The core object is a dict of lists

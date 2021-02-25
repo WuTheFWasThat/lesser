@@ -22,16 +22,15 @@ frame = lpd.from_dicts([
   dict(name="Charles", day=0, sleep_mins=340, reaction_time=88),
   dict(name="Charles", day=1, sleep_mins=410, reaction_time=94),
 ])
-reactions_by_sleep = toolz.pipe(
-    frame,
-    lpd.compute_key_op("sleep_hours", lambda x: x['sleep_mins'] // 60),
+reactions_by_sleep = (
+    frame.compute_key("sleep_hours", lambda x: x['sleep_mins'] // 60)
     # group_by makes a frame with key=[some computed key] and values=[a frame with all original items with that same computed key]
-    lpd.group_by_op("sleep_hours"),
-    lpd.compute_key_op("sleep_hours", lambda x: x["key"]),
-    lpd.compute_key_op(
+    .group_by("sleep_hours")
+    .compute_key("sleep_hours", lambda x: x["key"])
+    .compute_key(
         "average_reaction_time", lambda x: np.mean(x["values"]["reaction_time"])
-    ),
-    lpd.sort_by_op(lambda x: x["sleep_hours"])
+    )
+    .sort_by(lambda x: x["sleep_hours"])
 )
 
 print(reactions_by_sleep)

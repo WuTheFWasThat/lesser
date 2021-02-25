@@ -17,8 +17,8 @@ def size(f):
     return s
 
 
-# TODO: make this not mutate?
-def append(frame, x):
+# NOTE: this mutates
+def _append(frame, x):
     s = size(frame)
     for k, v in x.items():
         if k not in frame:
@@ -37,7 +37,7 @@ def append(frame, x):
 def from_dicts(xs):
     result = new()
     for x in xs:
-        append(result, x)
+        _append(result, x)
     return result
 
 
@@ -61,7 +61,7 @@ def to_dicts(frame):
 def slice(f, inds):
     result = new()
     for i in inds:
-        append(result, index(f, i))
+        _append(result, index(f, i))
     return result
 
 
@@ -73,10 +73,10 @@ def group_by(f, fn):
     for i in range(size(f)):
         val = index(f, i)
         key = fn(val)
-        append(key_to_vals[key], val)
+        _append(key_to_vals[key], val)
     result = new()
     for k, vals in key_to_vals.items():
-        append(result, dict(key=k, values=vals))
+        _append(result, dict(key=k, values=vals))
     return result
 
 
@@ -90,7 +90,7 @@ def map(f, fn):
     result = new()
     for i in range(size(f)):
         mapped = fn(index(f, i))
-        append(result, mapped)
+        _append(result, mapped)
     return result
 
 
@@ -100,6 +100,6 @@ def compute_key(f, k, fn):
         d = index(f, i)
         v = fn(d)
         d[k] = v
-        append(result, d)
+        _append(result, d)
     return result
 

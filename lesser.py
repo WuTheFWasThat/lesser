@@ -17,6 +17,7 @@ def size(f):
     return s
 
 
+# TODO: make this not mutate?
 def append(frame, x):
     s = size(frame)
     for k, v in x.items():

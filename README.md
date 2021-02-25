@@ -9,7 +9,7 @@ It is not fast, but it is very simple.
 
 It's most easily understood by example!
 
-```
+```python
 import lesser as lpd
 import numpy as np
 import toolz

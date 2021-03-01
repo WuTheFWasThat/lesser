@@ -18,7 +18,6 @@ It's most easily understood by example!
 ```python
 import lesser as lpd
 import numpy as np
-import toolz
 
 frame = lpd.from_dicts([
   dict(name="Alice",   day=0, sleep_mins=500, reaction_time=60),
@@ -28,6 +27,8 @@ frame = lpd.from_dicts([
   dict(name="Charles", day=0, sleep_mins=340, reaction_time=88),
   dict(name="Charles", day=1, sleep_mins=410, reaction_time=94),
 ])
+print(frame['name'])
+
 reactions_by_sleep = (
     frame.compute_key("sleep_hours", lambda x: x['sleep_mins'] // 60)
     # group_by makes a frame with key=[some computed key] and values=[a frame with all original items with that same computed key]

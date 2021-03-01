@@ -3,6 +3,11 @@ from functools import partial
 
 
 def _validate(d):
+    """
+    Makes sure a dictionary is a valid frame
+    - Requires each value in the dictionary is a list
+    - Requires each of those lists has the same length
+    """
     s = None
     ks = None
     for k, v in d.items():
@@ -23,6 +28,10 @@ _key_missing = object()
 
 
 class Frame(dict):
+    """
+    Adds some methods to dict-of-list datastructures to support a pandas-like API
+    """
+
     def __init__(self, **d):
         _validate(d)
         super().__init__(**d)
@@ -47,6 +56,9 @@ class Frame(dict):
         return self
 
     def index(self, ind):
+        """
+        Like iloc for a single integer
+        """
         res = dict()
         for k in self:
             v = self[k][ind]
@@ -71,12 +83,20 @@ class Frame(dict):
         return f
 
     def at(self, inds):
+        """
+        Like iloc for a list of integers
+        """
         result = Frame()
         for i in inds:
             result.append(self.index(i))
         return result
 
     def group_by(self, fn):
+        """
+        Returns a new frame with items with
+        - key: the value being grouped by, return by fn
+        - values: a Frame containing all the items in that group
+        """
         if isinstance(fn, str):
             k = fn
             fn = lambda x: x[k]
@@ -111,13 +131,14 @@ class Frame(dict):
         return result
 
     def compute_key(self, k, fn):
-        result = Frame()
-        for i in range(self.size()):
-            d = self.index(i)
-            v = fn(d)
-            d[k] = v
-            result.append(d)
-        return result
+        """
+        Convenience method for adding a new key
+        """
+        def compute_key_fn(x):
+            v = fn(x)
+            x[k] = v
+            return x
+        return self.map(compute_key_fn)
 
 
 def size(frame):

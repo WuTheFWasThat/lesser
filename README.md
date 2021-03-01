@@ -5,6 +5,12 @@ The core object is just a dict of lists (where each list has the same length).  
 
 It is not fast, but it is very simple.
 
+## Install
+
+```
+pip install lesser
+```
+
 ## Usage
 
 It's most easily understood by example!

@@ -115,20 +115,19 @@ class Frame(dict):
         ds = sorted(ds, key=fn)
         return from_dicts(ds)
 
-    def map(self, fn):
+    def apply(self, fn):
         result = Frame()
         for i in range(self.size()):
-            mapped = fn(self.index(i))
-            result.append(mapped)
+            applied = fn(self.index(i))
+            for x in applied:
+                result.append(x)
         return result
 
+    def map(self, fn):
+        return self.apply(lambda x: [fn(x)])
+
     def filter(self, fn):
-        result = Frame()
-        for i in range(self.size()):
-            d = self.index(i)
-            if fn(d):
-                result.append(d)
-        return result
+        return self.apply(lambda x: [x] if fn(x) else [])
 
     def compute_key(self, k, fn):
         """
@@ -182,6 +181,10 @@ def sort_by(frame, fn):
 
 def sort_by_op(fn):
     return lambda frame: sort_by(frame, fn)
+
+
+def apply(frame, fn):
+    return frame.apply(fn)
 
 
 def map(frame, fn):

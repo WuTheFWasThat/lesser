@@ -60,7 +60,7 @@ class Frame(dict):
         Like iloc for a single integer
         """
         res = dict()
-        for k in self:
+        for k in self.keys():
             v = self[k][ind]
             if v is _key_missing:
                 continue
@@ -138,6 +138,9 @@ class Frame(dict):
             x[k] = v
             return x
         return self.map(compute_key_fn)
+
+    def __iter__(self):
+        return iter(self.to_dicts())
 
 
 def size(frame):

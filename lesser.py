@@ -129,11 +129,13 @@ class Frame(dict):
     def filter(self, fn):
         return self.apply(lambda x: [x] if fn(x) else [])
 
-    def compute_key(self, k, fn):
+    def compute_key(self, k, fn, override=False):
         """
         Convenience method for adding a new key
         """
         def compute_key_fn(x):
+            if not override:
+                assert k not in x, f"Key {k} already on at least one item.  Use override=True"
             v = fn(x)
             x[k] = v
             return x

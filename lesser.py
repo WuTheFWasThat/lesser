@@ -24,7 +24,7 @@ def _validate(d):
     )
 
 
-_key_missing = object()
+KEY_MISSING = object()
 
 
 class Frame(dict):
@@ -46,13 +46,13 @@ class Frame(dict):
             if k not in self:
                 self[k] = []
                 for _ in range(s):
-                    self[k].append(_key_missing)
+                    self[k].append(KEY_MISSING)
             assert len(self[k]) == s
             self[k].append(v)
         for k in self.keys():
             if len(self[k]) != s + 1:
                 assert k not in x
-                self[k].append(_key_missing)
+                self[k].append(KEY_MISSING)
         return self
 
     def index(self, ind):
@@ -62,7 +62,7 @@ class Frame(dict):
         res = dict()
         for k in self.keys():
             v = self[k][ind]
-            if v is _key_missing:
+            if v is KEY_MISSING:
                 continue
             res[k] = v
         return res

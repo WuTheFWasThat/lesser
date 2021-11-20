@@ -1,7 +1,7 @@
 # Lesser :panda_face:
 
 This is a tiny data manipulation library, very loosely based on pandas.
-The core object is just a dict of lists (where each list has the same length).  We call this a frame.
+The core object is just a dict of lists (where each list has the same length).  We tack on a bunch of methods and call it a frame.
 
 It is not fast, but it is very simple.
 
@@ -49,6 +49,8 @@ plt.plot(
 )
 plt.show()
 ```
+
+There's no other documentation, so you'll have to read the source (which is quite short).
 
 ## Development
 

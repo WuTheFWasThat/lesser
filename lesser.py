@@ -141,6 +141,16 @@ class Frame(dict):
             return x
         return self.map(compute_key_fn)
 
+    def values_at(self, k, error_if_missing=True):
+        """
+        Get all values, same as frame[k] but filters out KEY_MISSING
+        """
+        if error_if_missing:
+            vals = self[k]
+        else:
+            vals = self.get(k, [])
+        return [x for x in vals if x is not KEY_MISSING]
+
     def __iter__(self):
         return iter(self.to_dicts())
 

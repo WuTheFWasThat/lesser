@@ -82,6 +82,13 @@ class Frame(dict):
             f.append(d)
         return f
 
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return Frame(**{k: v[key] for k, v in self.items()})
+        if isinstance(key, int):
+            return self.index(key)
+        return dict.__getitem__(self, key)
+
     def at(self, inds):
         """
         Like iloc for a list of integers

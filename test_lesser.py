@@ -11,6 +11,9 @@ def test_simple():
     ]
     f = lpd.from_dicts(dicts)
     assert lpd.to_dicts(f) == dicts
+    assert f[0] == dicts[0]
+    assert f[-1] == dicts[-1]
+    assert f[:].to_dicts() == dicts[:]
 
     new = dict(x=2, y=2)
     assert lpd.size(f) == 2
@@ -50,3 +53,6 @@ def test_chain():
     assert reactions_by_sleep['sleep_hours'] == [5, 6, 7, 8, 9]
     assert reactions_by_sleep['average_reaction_time'] == [88, 94, 81, (60 + 71) / 2, 62]
 
+
+if __name__ == "__main__":
+    pytest.main()
